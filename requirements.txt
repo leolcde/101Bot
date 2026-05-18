@@ -1,0 +1,9 @@
+requests
+pyyaml
+uvicorn
+fastapi
+python-multipart
+duckduckgo_search
+pandas
+ddgs
+tabulate

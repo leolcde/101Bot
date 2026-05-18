@@ -1,0 +1,406 @@
+{
+  "name": "persona",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://apis:8000/deepsearch",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "prompt",
+              "value": " You are an AI research assistant.  Category: General    Task:  1. Select the TOP 15 AI tools in the category \"General\".  2. Rank them from best to least relevant.  3. Always consider known AI leaders (e.g., GPT-5(high), GPT-5(medium) etc... for the most intelligent AI models).  4. Select only the tools that offer external integration.  5. Return JSON array of 15 objects with these exact keys:  \"Tool\": string, \"Provider\": string, \"Pros\": string,  \"Cons\": string,  \"Price\": string,    IMPORTANT: Respond ONLY with a valid JSON array.  Do not include any text before or after the JSON.  Do not wrap it in code blocks.  Respond ONLY with a valid JSON array."
+            },
+            {
+              "name": "category",
+              "value": "General"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2320,
+        -432
+      ],
+      "id": "9696bfd7-b421-4790-a2c7-e65d4c54d2a5",
+      "name": "DeepSearch9"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://apis:8000/tocsv",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "data",
+              "value": "={{ $json.data }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2704,
+        -544
+      ],
+      "id": "58fdb7c1-cb03-49a1-a71b-a1697ddc7156",
+      "name": "Convert to CSV string9"
+    },
+    {
+      "parameters": {
+        "jsCode": "const csvString = $input.first().json.csv;\n\nreturn [{\n  json: {},\n  binary: {\n    data: await this.helpers.prepareBinaryData(\n      Buffer.from(csvString, 'utf8'),\n      `${new Date().toISOString().split('T')[0]}-general.csv`,\n      'text/csv'\n    )\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2912,
+        -544
+      ],
+      "id": "4a5470f7-c821-437b-84dd-94d08f38233c",
+      "name": "Create CSV file9"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://apis:8000/tomd",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "data",
+              "value": "={{ $json.data }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2704,
+        -320
+      ],
+      "id": "53efae06-802a-4cb7-9e79-aa57bcf55a91",
+      "name": "Convert to MD string9"
+    },
+    {
+      "parameters": {
+        "jsCode": "const mdString = $input.first().json.md;\n\nreturn [{\n  json: {},\n  binary: {\n    data: await this.helpers.prepareBinaryData(\n      Buffer.from(mdString, 'utf8'),\n      `${new Date().toISOString().split('T')[0]}-general.md`,\n        'text/markdown'\n    )\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2912,
+        -320
+      ],
+      "id": "9d05dddf-060f-4c74-8751-3a504188b984",
+      "name": "Create MD file9"
+    },
+    {
+      "parameters": {
+        "content": "## General",
+        "height": 512,
+        "width": 1024,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2272,
+        -624
+      ],
+      "typeVersion": 1,
+      "id": "b16b6a92-6694-4197-82a4-6c9a6edc39c7",
+      "name": "Sticky Note20"
+    },
+    {
+      "parameters": {
+        "jsCode": "let raw = $json.data;\n\nif (typeof raw === \"string\") {\n  raw = JSON.parse(raw.replace(/```json|```/g, \"\"));\n}\nreturn [\n  {\n    json: {\n      data: raw\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2496,
+        -432
+      ],
+      "id": "ccd5bc5a-ce00-43c1-9a5d-0d5e57c86765",
+      "name": "Clear JSON2"
+    },
+    {
+      "parameters": {
+        "content": "## Send Markdowns by Mail",
+        "height": 528,
+        "width": 864
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        6336,
+        592
+      ],
+      "typeVersion": 1,
+      "id": "d79cf024-7629-43d2-9424-69c3b7d584c5",
+      "name": "Sticky Note21"
+    },
+    {
+      "parameters": {
+        "jsCode": "const allContents = items.map((item, index) => {\n  const fileName = item.binary.data.fileName || `File_${index + 1}.md`;\n  const content = Buffer.from(item.binary.data.data, 'base64').toString('utf8');\n  return `# ${fileName}\\n\\n${content}`;\n});\n\nconst merged = allContents.join(\"\\n\\n---\\n\\n\");\n\nreturn [{\n  json: {},\n  binary: {\n    data: await this.helpers.prepareBinaryData(\n      Buffer.from(merged, 'utf8'),\n      `${new Date().toISOString().split('T')[0]}-all-categories.md`,\n      'text/markdown'\n    )\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6784,
+        816
+      ],
+      "id": "e1db2f3b-37bd-4d43-81ba-403ca02cb4ef",
+      "name": "Concatenate all markdowns1"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "sendTo": "mathilde.lorentz@reboot-conseil.com",
+        "subject": "n8n workflow - Veille AI Ranking",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        7056,
+        800
+      ],
+      "id": "c617de90-fe0b-48f5-a686-1fda9c10d465",
+      "name": "Send Email1",
+      "webhookId": "73e1dfc7-31d9-48ef-af0a-9fbf1d36713f"
+    },
+    {
+      "parameters": {
+        "numberInputs": 10
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        6544,
+        688
+      ],
+      "id": "4cb937e9-3fc0-43c9-a889-5f00fce8572d",
+      "name": "Merge5"
+    },
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Hi there !\nMy name is 101Bot. I am here to assist you !\n\n👉Do you already have an account ?",
+        "availableInChat": true,
+        "agentName": "101Bot",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -832,
+        512
+      ],
+      "id": "d60f1a36-4ea1-47ab-b3c6-d81436526f7d",
+      "name": "When chat message received",
+      "webhookId": "d544be8c-8106-4854-a864-c8d617e20825"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "92f08796-3626-4c5f-ba18-a1d184075e2d",
+              "leftValue": "={{ $json.chatInput }}",
+              "rightValue": "yes",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "b5a70b7a-e502-4b69-ae7b-5c3601c2d6da",
+              "leftValue": "={{ $json.chatInput }}",
+              "rightValue": "Yes",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -640,
+        512
+      ],
+      "id": "e0a6541b-12e0-4061-a8ce-d238f7f5bfdf",
+      "name": "Has an account ?"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "message": "Great ! \nFirst, let's create you an account :)\n\n👉What's your ID ?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.2,
+      "position": [
+        -400,
+        656
+      ],
+      "id": "50dde7db-fb78-49bf-8dda-8cb2088c9b95",
+      "name": "Register",
+      "webhookId": "ea5ff017-ab48-4858-885d-bf229066fd72"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "message": "Welcome back !\nLet's authenticate you.\n\n👉What's your ID ?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.2,
+      "position": [
+        -400,
+        368
+      ],
+      "id": "1f3708e5-af38-4044-a8c3-89b1c25e2ce0",
+      "name": "Log In",
+      "webhookId": "ea5ff017-ab48-4858-885d-bf229066fd72"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "DeepSearch9": {
+      "main": [
+        [
+          {
+            "node": "Clear JSON2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to CSV string9": {
+      "main": [
+        [
+          {
+            "node": "Create CSV file9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create CSV file9": {
+      "main": [
+        []
+      ]
+    },
+    "Convert to MD string9": {
+      "main": [
+        [
+          {
+            "node": "Create MD file9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clear JSON2": {
+      "main": [
+        [
+          {
+            "node": "Convert to CSV string9",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Convert to MD string9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge5": {
+      "main": [
+        [
+          {
+            "node": "Concatenate all markdowns1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create MD file9": {
+      "main": [
+        [
+          {
+            "node": "Merge5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Has an account ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has an account ?": {
+      "main": [
+        [
+          {
+            "node": "Log In",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Register",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "0b82d9bc-47b2-4d5d-8fc1-115c0467382e",
+  "meta": {
+    "instanceId": "9b5cc7bde56e2478443b2d16bf91a521183d63cd21b78086ee0cd8c37542357d"
+  },
+  "id": "2q7j6w9TXNZt3kcE",
+  "tags": []
+}
