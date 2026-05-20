@@ -1,4 +1,5 @@
 import json
+import os
 import requests
 
 from convert_request_to_query import convert_request_to_query
@@ -11,10 +12,14 @@ import pandas as pd
 
 app = FastAPI()
 
+
+OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://ollama:11434")
+
 @app.post("/deepsearch")
 def deep_search(user_request: str = Body(..., embed=True)):
 
-    query = convert_request_to_query(user_request)
+    queries = convert_request_to_query(user_request)
+    query = " OR ".join(queries)
 
     #Duckduckgo
     results = []
@@ -23,7 +28,7 @@ def deep_search(user_request: str = Body(..., embed=True)):
             results.append({
                 "title": r.get("title", ""),
                 "url": r.get("url", ""),
-                "snipper": r.get("body", "")
+                "snippet": r.get("body", "")
             })
 
     search_results_text = "\n".join([
@@ -57,7 +62,7 @@ Return valid JSON only based on the expected JSON format.
 }}
 """
     response = requests.post(
-        "http://localhost:11434/api/generate",
+        f"{OLLAMA_BASE_URL}/api/generate",
         json={
             "model": "llama3",
             "prompt": prompt,

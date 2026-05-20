@@ -3,6 +3,7 @@
 set -e
 
 echo "🚀 Démarrage des services..."
+docker compose down --remove-orphans
 docker compose up -d
 
 echo "⏳ Attente que Postgres soit prêt..."

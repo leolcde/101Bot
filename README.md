@@ -24,10 +24,11 @@ sudo chown -R 1000:1000 n8n_data
 ### 5 - Launch the project
 
 ```bash
-docker-compose up -d --build
+docker compose up -d --build
 ```
 - n8n -> http://localhost:5678
 - API FastAPI -> http://localhost:8000
+- Ollama -> http://localhost:11435
 
 ---
 

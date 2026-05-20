@@ -13,17 +13,23 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    networks:
+      - persona-net
 
-  apis:
+  pythonscript:
     build:
       context: .
       dockerfile: src/Dockerfile
-    container_name: n8n-apis
+    container_name: n8n-pythonscript
     ports:
       - "8000:8000"
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
     depends_on:
       postgres:
         condition: service_healthy
+    networks:
+      - persona-net
 
   postgres:
     image: postgres:16
@@ -44,3 +50,22 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - persona-net
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: persona-ollama
+    ports:
+      - "11435:11434"
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434
+    volumes:
+      - ./ollama_data:/root/.ollama
+    restart: always
+    networks:
+      - persona-net
+
+networks:
+  persona-net:
+    driver: bridge

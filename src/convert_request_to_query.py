@@ -1,5 +1,9 @@
+import os
 import requests
 import json
+
+
+OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://ollama:11434")
 
 def convert_request_to_query(user_request: str):
     
@@ -29,7 +33,7 @@ Expected JSON format:
 """
 
     response = requests.post(
-        "http://localhost:11434/api/generate",
+        f"{OLLAMA_BASE_URL}/api/generate",
         json={
             "model": "llama3",
             "prompt": prompt,
