@@ -1,7 +1,7 @@
 import json
 import requests
 
-from src.convert_request_to_query import convert_request_to_query
+from convert_request_to_query import convert_request_to_query
 
 from fastapi import FastAPI, Body
 from ddgs import DDGS

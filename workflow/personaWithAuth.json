@@ -1,0 +1,749 @@
+{
+  "name": "persona",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://apis:8000/deepsearch",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "prompt",
+              "value": " You are an AI research assistant.  Category: General    Task:  1. Select the TOP 15 AI tools in the category \"General\".  2. Rank them from best to least relevant.  3. Always consider known AI leaders (e.g., GPT-5(high), GPT-5(medium) etc... for the most intelligent AI models).  4. Select only the tools that offer external integration.  5. Return JSON array of 15 objects with these exact keys:  \"Tool\": string, \"Provider\": string, \"Pros\": string,  \"Cons\": string,  \"Price\": string,    IMPORTANT: Respond ONLY with a valid JSON array.  Do not include any text before or after the JSON.  Do not wrap it in code blocks.  Respond ONLY with a valid JSON array."
+            },
+            {
+              "name": "category",
+              "value": "General"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        48,
+        192
+      ],
+      "id": "c86a3165-370d-4af9-a5eb-3b4456cea6dd",
+      "name": "DeepSearch9"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://apis:8000/tocsv",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "data",
+              "value": "={{ $json.data }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        432,
+        80
+      ],
+      "id": "2791ff10-d440-4eea-89e4-b43255a77899",
+      "name": "Convert to CSV string9"
+    },
+    {
+      "parameters": {
+        "jsCode": "const csvString = $input.first().json.csv;\n\nreturn [{\n  json: {},\n  binary: {\n    data: await this.helpers.prepareBinaryData(\n      Buffer.from(csvString, 'utf8'),\n      `${new Date().toISOString().split('T')[0]}-general.csv`,\n      'text/csv'\n    )\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        640,
+        80
+      ],
+      "id": "a19b9b71-8a17-41a8-a0aa-f538d91f6578",
+      "name": "Create CSV file9"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://apis:8000/tomd",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "data",
+              "value": "={{ $json.data }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        432,
+        304
+      ],
+      "id": "d83719de-5e51-4cab-82b2-0ce785369562",
+      "name": "Convert to MD string9"
+    },
+    {
+      "parameters": {
+        "jsCode": "const mdString = $input.first().json.md;\n\nreturn [{\n  json: {},\n  binary: {\n    data: await this.helpers.prepareBinaryData(\n      Buffer.from(mdString, 'utf8'),\n      `${new Date().toISOString().split('T')[0]}-general.md`,\n        'text/markdown'\n    )\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        640,
+        304
+      ],
+      "id": "20bee40c-4568-4620-8656-8372488d6227",
+      "name": "Create MD file9"
+    },
+    {
+      "parameters": {
+        "content": "## General",
+        "height": 512,
+        "width": 1024,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "71ca0ab9-8deb-44ea-96f2-2e3c48e3b9e8",
+      "name": "Sticky Note20"
+    },
+    {
+      "parameters": {
+        "jsCode": "let raw = $json.data;\n\nif (typeof raw === \"string\") {\n  raw = JSON.parse(raw.replace(/```json|```/g, \"\"));\n}\nreturn [\n  {\n    json: {\n      data: raw\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        192
+      ],
+      "id": "873b7266-61cd-463d-963e-ae40544227ae",
+      "name": "Clear JSON2"
+    },
+    {
+      "parameters": {
+        "content": "## Send Markdowns by Mail",
+        "height": 528,
+        "width": 864
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        4272,
+        1216
+      ],
+      "typeVersion": 1,
+      "id": "df1396fe-3617-46fe-b809-0901b03ced55",
+      "name": "Sticky Note21"
+    },
+    {
+      "parameters": {
+        "jsCode": "const allContents = items.map((item, index) => {\n  const fileName = item.binary.data.fileName || `File_${index + 1}.md`;\n  const content = Buffer.from(item.binary.data.data, 'base64').toString('utf8');\n  return `# ${fileName}\\n\\n${content}`;\n});\n\nconst merged = allContents.join(\"\\n\\n---\\n\\n\");\n\nreturn [{\n  json: {},\n  binary: {\n    data: await this.helpers.prepareBinaryData(\n      Buffer.from(merged, 'utf8'),\n      `${new Date().toISOString().split('T')[0]}-all-categories.md`,\n      'text/markdown'\n    )\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4720,
+        1440
+      ],
+      "id": "6377e17c-fbca-42e6-8c45-26f6138fa5ba",
+      "name": "Concatenate all markdowns1"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "sendTo": "mathilde.lorentz@reboot-conseil.com",
+        "subject": "n8n workflow - Veille AI Ranking",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        4992,
+        1424
+      ],
+      "id": "fe5e91bf-192f-4b13-9e29-859b42fe1765",
+      "name": "Send Email1",
+      "webhookId": "73e1dfc7-31d9-48ef-af0a-9fbf1d36713f"
+    },
+    {
+      "parameters": {
+        "numberInputs": 10
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        4272,
+        1312
+      ],
+      "id": "f66b6791-40b0-4913-9079-c7bf38503e1a",
+      "name": "Merge5"
+    },
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Hi there !\nMy name is 101Bot. I am here to assist you !\n\n👉Do you already have an account ?",
+        "availableInChat": true,
+        "agentName": "101Bot",
+        "options": {
+          "responseMode": "responseNodes"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -3104,
+        1136
+      ],
+      "id": "73bb4aee-b8d3-4df2-ae56-7c843e63b3d7",
+      "name": "When chat message received",
+      "webhookId": "d544be8c-8106-4854-a864-c8d617e20825"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "1ea93317-1231-424a-ac80-b60234201f8a",
+              "leftValue": "={{ $json.email }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -2688,
+        1136
+      ],
+      "id": "fbae7125-cbf7-4a55-8c71-86f8caba52ff",
+      "name": "has an account ?"
+    },
+    {
+      "parameters": {
+        "message": "Tu as déjà un compte, donne moi le code qui ta été envoyer par mail !!",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        -2176,
+        1056
+      ],
+      "id": "5bb07cfa-7d78-4d31-8f44-ef0cf2485c8f",
+      "name": "Login",
+      "webhookId": "c8554124-1a0c-4737-a696-e448b46dea16"
+    },
+    {
+      "parameters": {
+        "message": "Can you give me your address for authentication ? 😀",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        -2496,
+        1600
+      ],
+      "id": "0b10801a-d959-4295-8a4d-a5aa9dc0b35f",
+      "name": "Register",
+      "webhookId": "24a21001-c842-4d30-b846-f49bf29f9007",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "message": "You're login !",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        -1760,
+        976
+      ],
+      "id": "dbccdec0-cafd-4fa6-bce0-5b72eab29916",
+      "name": "Logged",
+      "webhookId": "95df3685-6b12-4d3d-a04b-e4c62ac34bbb"
+    },
+    {
+      "parameters": {
+        "message": "X Wong OTP code",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        -1760,
+        1136
+      ],
+      "id": "0e11daf2-a7a0-40cf-98b1-7b9b7344bce8",
+      "name": "Wong code",
+      "webhookId": "95df3685-6b12-4d3d-a04b-e4c62ac34bbb"
+    },
+    {
+      "parameters": {
+        "message": "Reverifie ton code, ce n'est pas le bon !",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        -1552,
+        1184
+      ],
+      "id": "78304f97-036b-484a-a41c-cfc3bcf1abb2",
+      "name": "resend code pls",
+      "webhookId": "95df3685-6b12-4d3d-a04b-e4c62ac34bbb"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "11ff5693-241c-4092-8003-32114185b1a8",
+              "leftValue": "={{ $('When chat message received').item.json.chatInput }}",
+              "rightValue": "0000",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1968,
+        1056
+      ],
+      "id": "dac9eb5a-a081-4010-9443-c472f2791487",
+      "name": "Right code ?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "c5e266df-bfbd-4109-8823-0da0d6bb639c",
+              "leftValue": "={{ $('When chat message received').first().json.chatInput }}",
+              "rightValue": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
+              "operator": {
+                "type": "string",
+                "operation": "regex"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -2224,
+        1600
+      ],
+      "id": "a20cfb6c-87b4-41fe-bbe5-df50aa795d6e",
+      "name": "correct email format"
+    },
+    {
+      "parameters": {
+        "message": "Un email ta été envoyer avec un lien d'authentification",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        -2016,
+        1488
+      ],
+      "id": "5f877f26-a995-49fe-9479-d4d7e042e471",
+      "name": "send OTP code",
+      "webhookId": "9a6bc8d5-b02d-4bbb-b041-99cd93de21e6"
+    },
+    {
+      "parameters": {
+        "message": "Ah nan, ton email n'est pas bien formaté !",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        -2016,
+        1696
+      ],
+      "id": "cc63f024-e728-48fd-a41e-2b6865f15521",
+      "name": "not formatted email",
+      "webhookId": "89b07480-9836-4694-9506-c08779ab9baa"
+    },
+    {
+      "parameters": {
+        "jsCode": "const otp = Math.floor(100000 + Math.random() * 900000).toString();\nconst sessionId = $('When chat message received').first().json.sessionId;\nconst email = $('When chat message received').first().json.chatInput;\n\nreturn { json: { otp, sessionId, email } };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1808,
+        1488
+      ],
+      "id": "2379f0f2-5534-47c4-b840-df0d8b4c21aa",
+      "name": "Generate code"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT email FROM auth_tokens \nWHERE token = '{{ $('When chat message received').item.json.sessionId }}'\n  AND type = 'session'\n  AND expires_at > NOW()\nLIMIT 1;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -2896,
+        1136
+      ],
+      "id": "b92c0380-0ea6-4a8b-bbd8-02baa68db5a6",
+      "name": "Check session id",
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "DTTznXV18cXVbQ8y",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO auth_tokens (email, token, type, expires_at, session_ref)\nVALUES (\n  '{{ $json.email }}',\n  '{{ $json.otp }}',\n  'otp',\n  NOW() + INTERVAL '10 minutes',\n  '{{ $json.sessionId }}'\n);",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -1600,
+        1488
+      ],
+      "id": "d7a75016-f129-452f-a21b-df5ab53d933d",
+      "name": "add token in db",
+      "credentials": {
+        "postgres": {
+          "id": "DTTznXV18cXVbQ8y",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Generate code').first().json.email }}",
+        "subject": "Your connection code",
+        "emailType": "text",
+        "message": "=Ton code OTP : {{ $('Generate code').first().json.otp }}\n\nIl expire dans 10 minutes.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -1392,
+        1488
+      ],
+      "id": "a3701b46-f8ac-4d9d-b2c6-b889c4395f9f",
+      "name": "Send a message",
+      "webhookId": "9f5055ed-564a-4593-8c76-d623250c7eb3",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "YHOH7W6zHIpaUn5n",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "DeepSearch9": {
+      "main": [
+        [
+          {
+            "node": "Clear JSON2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to CSV string9": {
+      "main": [
+        [
+          {
+            "node": "Create CSV file9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to MD string9": {
+      "main": [
+        [
+          {
+            "node": "Create MD file9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clear JSON2": {
+      "main": [
+        [
+          {
+            "node": "Convert to CSV string9",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Convert to MD string9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge5": {
+      "main": [
+        [
+          {
+            "node": "Concatenate all markdowns1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create MD file9": {
+      "main": [
+        [
+          {
+            "node": "Merge5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Check session id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "has an account ?": {
+      "main": [
+        [
+          {
+            "node": "Login",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Register",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Login": {
+      "main": [
+        [
+          {
+            "node": "Right code ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Register": {
+      "main": [
+        [
+          {
+            "node": "correct email format",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wong code": {
+      "main": [
+        [
+          {
+            "node": "resend code pls",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "resend code pls": {
+      "main": [
+        [
+          {
+            "node": "Login",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Right code ?": {
+      "main": [
+        [
+          {
+            "node": "Logged",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wong code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "correct email format": {
+      "main": [
+        [
+          {
+            "node": "send OTP code",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "not formatted email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "not formatted email": {
+      "main": [
+        [
+          {
+            "node": "Register",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "send OTP code": {
+      "main": [
+        [
+          {
+            "node": "Generate code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate code": {
+      "main": [
+        [
+          {
+            "node": "add token in db",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check session id": {
+      "main": [
+        [
+          {
+            "node": "has an account ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add token in db": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "fb1a5d8a-a4b5-4531-9978-097ba29a5c19",
+  "meta": {
+    "instanceId": "eb7aa874eb350dd81587d4824291853962793e1993a6800dfbc98becba38782c"
+  },
+  "id": "snRgm0AU7si0DnhH",
+  "tags": []
+}

@@ -10,7 +10,10 @@ services:
     volumes:
       - ./n8n_data:/home/node/.n8n
     restart: always
- 
+    depends_on:
+      postgres:
+        condition: service_healthy
+
   apis:
     build:
       context: .
@@ -18,3 +21,26 @@ services:
     container_name: n8n-apis
     ports:
       - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:16
+    container_name: n8n-postgres
+    environment:
+      - POSTGRES_USER=n8n
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=n8n_auth
+      - TZ=Europe/Paris
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+      - ./src/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U n8n -d n8n_auth"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
