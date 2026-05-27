@@ -1,0 +1,4 @@
+# Keep Python image context minimal and avoid runtime volumes/data
+*
+!requirements.txt
+!src/

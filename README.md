@@ -1,4 +1,4 @@
-# Persona - n8n + FastAPI
+# Persona - n8n + FastAPI + Postgres DB + Ollama
 
 ---
 
@@ -24,11 +24,11 @@ sudo chown -R 1000:1000 n8n_data
 ### 5 - Launch the project
 
 ```bash
-docker compose up -d --build
+./run.sh
 ```
-- n8n -> http://localhost:5678
-- API FastAPI -> http://localhost:8000
-- Ollama -> http://localhost:11435
+- n8n -> http://localhost:5678"
+- pythonscript -> http://pythonscript:8000"
+- ollama -> http://ollama:11435"
 
 ---
 
@@ -40,3 +40,4 @@ docker compose up -d --build
 4. Click **Create Workflow**
 5. Select the 3 small dots in the top right corner and then click **Import from File**
 6. Select the `persona.json` file from the `workflow/` folder in the repo
+

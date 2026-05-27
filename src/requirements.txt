@@ -1,0 +1,5 @@
+uvicorn
+fastapi
+duckduckgo_search
+ddgs
+psycopg2-binary
