@@ -4,6 +4,19 @@
 
 ## Installation
 
+### Prerequisite: Docker Compose v2
+
+This project works best with Docker Compose v2 (`docker compose`).
+
+Check your version:
+
+```bash
+docker compose version
+```
+
+If this command is missing and you only have `docker-compose` v1, install the Compose plugin for your distro.
+Legacy Compose v1 can crash on recent Docker Engine versions with Python tracebacks like `KeyError: 'id'`.
+
 ### 1 - Clone the repo
 
 ```bash

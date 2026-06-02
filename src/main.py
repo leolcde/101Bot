@@ -1,38 +1,50 @@
 import os
 
-import psycopg2
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, Body
 
-from create_newsletter import create_newsletter, NewsletterRequest
+from db.get_db_connection import get_db_connection
+
+from newsletter.create_newsletter import create_newsletter
+from newsletter.schemas import NewsletterRequest
+from newsletter.update_preferences import update_preferences
+from newsletter.unsubscribe import unsubscribe
+
+from user.delete_user_data import delete_user_data
 
 app = FastAPI()
 
-
-def get_db_connection():
-    host = os.getenv("POSTGRES_HOST", "postgres")
-    database = os.getenv("POSTGRES_DB")
-    user = os.getenv("POSTGRES_USER")
-    password = os.getenv("POSTGRES_PASSWORD")
-
-    if not database or not user or not password:
-        raise HTTPException(status_code=500, detail="Missing PostgreSQL configuration")
-
-    try:
-        return psycopg2.connect(
-            database=database,
-            user=user,
-            password=password,
-            host=host,
-            port=5432,
-        )
-    except psycopg2.Error as exc:
-        raise HTTPException(status_code=500, detail=f"Database connection failed: {exc}") from exc
+connection = get_db_connection()
 
 @app.post("/newsletter/create")
 def create_newsletter_route(data: NewsletterRequest):
     connection = get_db_connection()
     try:
         return create_newsletter(connection, data)
+    finally:
+        connection.close()
+
+
+@app.patch("/newsletter/preferences")
+def update_preferences_route(data: NewsletterRequest):
+    connection = get_db_connection()
+    try:
+        return update_preferences(connection, data)
+    finally:
+        connection.close()
+
+@app.post("/newsletter/unsubscribe")
+def unsubscribe_route(session_id: str = Body(..., embed=True)):
+    connection = get_db_connection()
+    try:
+        return unsubscribe(connection, session_id)
+    finally:
+        connection.close()
+
+@app.delete("/user/delete-data")
+def delete_user_data_route(session_id: str = Body(..., embed=True)):
+    connection = get_db_connection()
+    try:
+        return delete_user_data(connection, session_id)
     finally:
         connection.close()
 

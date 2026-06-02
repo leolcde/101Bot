@@ -1,18 +1,6 @@
 from fastapi import HTTPException
-from pydantic import BaseModel
-from typing import Optional
-import psycopg2
 
-
-class NewsletterRequest(BaseModel):
-    session_id: str
-    topics: list[str]
-    frequency: Optional[str] = "daily"
-    send_time: Optional[str] = None
-    tone: Optional[str] = "neutral"
-    format: Optional[str] = "short"
-    max_articles: Optional[int] = 5
-
+from newsletter.schemas import NewsletterRequest
 
 def create_newsletter(conn, data: NewsletterRequest):
     with conn.cursor() as cur:
@@ -30,6 +18,17 @@ def create_newsletter(conn, data: NewsletterRequest):
             raise HTTPException(status_code=401, detail="Invalid or expired session")
 
         user_id = user[0]
+
+        if data.frequency is None:
+            data.frequency = "daily"
+        if data.send_time is None:
+            data.send_time = "8:00"
+        if data.tone is None:
+            data.tone = "neutral"
+        if data.format is None:
+            data.format = "short"
+        if data.max_articles is None:
+            data.max_articles = 5
 
         cur.execute("""
             INSERT INTO user_preferences (
@@ -70,6 +69,6 @@ def create_newsletter(conn, data: NewsletterRequest):
 
         return {
             "success": True,
-            "message": "Newsletter preferences saved",
+            "message": "Newsletter preferences saved✅",
             "preference_id": preference_id
         }

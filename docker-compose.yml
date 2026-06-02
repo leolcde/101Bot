@@ -23,6 +23,8 @@ services:
     container_name: n8n-pythonscript
     ports:
       - "8000:8000"
+    volumes:
+      - ./src:/app
     environment:
       - OLLAMA_BASE_URL=http://ollama:11434
       - POSTGRES_HOST=postgres
