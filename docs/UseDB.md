@@ -1,13 +1,19 @@
-# Use DB : 
+# Use DB
 
-Connect to db : 
+## Connect to the database
 
-`docker exec -it n8n-postgres psql -U n8n -d n8n_auth`
+```bash
+docker exec -it n8n-postgres psql -U n8n -d n8n_auth
+```
 
-See tables : 
+## See tables
 
-`\dt`
+```sql
+\dt
+```
 
-Drop table :
+## Drop table
 
-`DROP TABLE IF EXISTS <table_name> CASCADE;`
+```sql
+DROP TABLE IF EXISTS <table_name> CASCADE;
+```

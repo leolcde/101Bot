@@ -14,10 +14,10 @@
       "type": "@n8n/n8n-nodes-langchain.chatTrigger",
       "typeVersion": 1.4,
       "position": [
-        176,
-        32
+        -10288,
+        2368
       ],
-      "id": "57e1ad83-5fb7-47ac-80da-f92ecf52a9f9",
+      "id": "f4ba7e01-5a8c-4e44-8dd3-4d890c0017db",
       "name": "When chat message received",
       "webhookId": "d544be8c-8106-4854-a864-c8d617e20825"
     },
@@ -30,10 +30,10 @@
       "type": "@n8n/n8n-nodes-langchain.chat",
       "typeVersion": 1.3,
       "position": [
-        1568,
-        448
+        -8896,
+        2784
       ],
-      "id": "ac537c7c-aac5-44bc-9a0d-4f41db7b5849",
+      "id": "204465bd-be89-4886-ac89-f5603fe702f7",
       "name": "Invalid email",
       "webhookId": "invalid-email-wh"
     },
@@ -44,10 +44,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1600,
-        256
+        -8864,
+        2592
       ],
-      "id": "cfb0a62a-3537-48c2-a8e9-dcf450ae523a",
+      "id": "91f68dca-73d9-47f6-8bf5-92ee28fc3e89",
       "name": "Generate OTP"
     },
     {
@@ -61,15 +61,15 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        1808,
-        256
+        -8656,
+        2592
       ],
-      "id": "7d2669fb-59db-4aee-a929-112903a67561",
+      "id": "510d34ed-ece2-4030-9106-1fee0852829c",
       "name": "Store OTP",
       "credentials": {
         "postgres": {
-          "id": "64qNjyun3jjBjUv2",
-          "name": "Postgres account"
+          "id": "32OWvi1TR83JGx3A",
+          "name": "Postgres account 3"
         }
       }
     },
@@ -86,15 +86,15 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        2000,
-        256
+        -8464,
+        2592
       ],
-      "id": "9cf43df9-9276-4920-a47f-c293fafc7a87",
+      "id": "75163f03-c2f7-455f-9df3-c645df57a49e",
       "name": "Send OTP mail",
       "webhookId": "79f30b58-9c80-47a3-baf6-a71e6a732c91",
       "credentials": {
         "gmailOAuth2": {
-          "id": "FSSsVf92jxNa0I1P",
+          "id": "OBnNn0fsnQ7Aj3sj",
           "name": "Gmail account"
         }
       }
@@ -110,16 +110,16 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        2576,
-        272
+        -7888,
+        2608
       ],
-      "id": "909b6611-a2bd-4d25-a5f8-d5b665dba97b",
+      "id": "404f1b88-d013-48cd-9492-afe5023e2a21",
       "name": "Verify OTP",
       "alwaysOutputData": true,
       "credentials": {
         "postgres": {
-          "id": "64qNjyun3jjBjUv2",
-          "name": "Postgres account"
+          "id": "32OWvi1TR83JGx3A",
+          "name": "Postgres account 3"
         }
       }
     },
@@ -134,15 +134,15 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        4064,
-        240
+        -6432,
+        2576
       ],
-      "id": "97601384-86e2-4b4c-a1fa-96c9c9a78763",
+      "id": "78ecf693-26b7-4107-acd2-0198f51db135",
       "name": "Create session",
       "credentials": {
         "postgres": {
-          "id": "64qNjyun3jjBjUv2",
-          "name": "Postgres account"
+          "id": "32OWvi1TR83JGx3A",
+          "name": "Postgres account 3"
         }
       }
     },
@@ -155,10 +155,10 @@
       "type": "@n8n/n8n-nodes-langchain.chat",
       "typeVersion": 1.3,
       "position": [
-        2976,
-        432
+        -7488,
+        2768
       ],
-      "id": "c60af43f-8e7a-4eb7-9bdc-bdc5ae4613fc",
+      "id": "ff4e3ebd-c1b8-4a9f-b66c-b76ece237e44",
       "name": "Wrong OTP",
       "webhookId": "wrong-otp-wh"
     },
@@ -173,15 +173,15 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        416,
-        32
+        -10048,
+        2368
       ],
-      "id": "bb6524c1-b818-4e65-8e4e-30fa766005f8",
+      "id": "4e02b7f2-56d5-438e-b610-f225ea02f52b",
       "name": "Find session ID",
       "credentials": {
         "postgres": {
-          "id": "64qNjyun3jjBjUv2",
-          "name": "Postgres account"
+          "id": "Vc6WtIRUFGCiKPV1",
+          "name": "Postgres account 2"
         }
       }
     },
@@ -212,10 +212,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        640,
-        32
+        -9824,
+        2368
       ],
-      "id": "55b6ac07-2c27-4b7e-a1fc-a782115db04a",
+      "id": "47b2a767-5537-46c4-a06c-74ffa879afbb",
       "name": "If session ID exists"
     },
     {
@@ -227,10 +227,10 @@
       "type": "@n8n/n8n-nodes-langchain.chat",
       "typeVersion": 1.3,
       "position": [
-        2192,
-        256
+        -8272,
+        2592
       ],
-      "id": "341d56c0-c07c-40d1-b97f-176454e8fc8b",
+      "id": "f13315a1-e151-49f5-bb85-beb6ef7dbc3a",
       "name": "OTP sent",
       "webhookId": "otp-sent-wh"
     },
@@ -261,10 +261,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        1376,
-        272
+        -9088,
+        2608
       ],
-      "id": "82a10023-89b8-455d-85db-a565542b0337",
+      "id": "befbf63c-658c-4900-8736-a703a26f52f2",
       "name": "If email valid"
     },
     {
@@ -278,16 +278,16 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        3184,
-        256
+        -7280,
+        2592
       ],
-      "id": "7dafea15-076b-43fd-9404-31fffe1a88d1",
+      "id": "9ccbae86-7535-4fa7-b427-f0686e97a3dc",
       "name": "Does user exist ?",
       "alwaysOutputData": true,
       "credentials": {
         "postgres": {
-          "id": "64qNjyun3jjBjUv2",
-          "name": "Postgres account"
+          "id": "32OWvi1TR83JGx3A",
+          "name": "Postgres account 3"
         }
       }
     },
@@ -319,10 +319,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        3408,
-        256
+        -7056,
+        2592
       ],
-      "id": "7b7b2698-0b3c-4354-a748-0f69bb809012",
+      "id": "1e9be7fa-f834-4ea8-b28e-f921e238dc89",
       "name": "If user exists"
     },
     {
@@ -336,15 +336,15 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        2976,
-        256
+        -7488,
+        2592
       ],
-      "id": "e13ddb78-1b8f-4452-a5ef-85395a837124",
+      "id": "55f250de-bffb-44d5-ac43-3129a939b79f",
       "name": "Delete OTP",
       "credentials": {
         "postgres": {
-          "id": "64qNjyun3jjBjUv2",
-          "name": "Postgres account"
+          "id": "32OWvi1TR83JGx3A",
+          "name": "Postgres account 3"
         }
       }
     },
@@ -356,10 +356,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        880,
-        256
+        -9584,
+        2592
       ],
-      "id": "59c8f7f0-bf0d-4f90-b85c-856f7b4d00b6",
+      "id": "944ff61b-dffd-4c35-aae7-9dc2befae0df",
       "name": "Format email"
     },
     {
@@ -390,10 +390,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        2768,
-        272
+        -7696,
+        2608
       ],
-      "id": "3cf05bea-d090-482c-8465-432b6e122c3c",
+      "id": "7717a0bc-c994-434b-8b77-fe939b5a96fb",
       "name": "If OTP valid"
     },
     {
@@ -405,10 +405,10 @@
       "type": "@n8n/n8n-nodes-langchain.chat",
       "typeVersion": 1.3,
       "position": [
-        4256,
-        240
+        -6240,
+        2576
       ],
-      "id": "57c125b3-3ff3-45b7-9279-295407967afe",
+      "id": "2d585038-fc9f-4df7-b78d-5017d88ab6c0",
       "name": "Authenticated",
       "webhookId": "logged-in-wh"
     },
@@ -420,10 +420,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1776,
-        448
+        -8688,
+        2784
       ],
-      "id": "f2662dde-9298-4ab6-b720-3468bd584cb5",
+      "id": "02b30bbd-7938-4b51-8ada-48ee17d97d9d",
       "name": "Format email1"
     },
     {
@@ -431,10 +431,10 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        1168,
-        272
+        -9296,
+        2608
       ],
-      "id": "056f3a4b-f7a3-4238-8b27-03ed5d0e3e8c",
+      "id": "7e23fcfd-8ed5-41c3-b739-102785366535",
       "name": "Merge"
     },
     {
@@ -442,10 +442,10 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        2400,
-        272
+        -8064,
+        2608
       ],
-      "id": "bd9940e1-bd64-4abd-95ed-2f816d4bc4e1",
+      "id": "020d1c30-0fee-4dda-802c-8432d4e636c4",
       "name": "Merge1"
     },
     {
@@ -459,22 +459,22 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        3856,
-        240
+        -6608,
+        2576
       ],
-      "id": "a26cb09f-b726-458b-919b-e8b50018d42a",
+      "id": "3df57494-82ba-4b2a-aeab-2c75ce4bff23",
       "name": "Find user_id",
       "credentials": {
         "postgres": {
-          "id": "64qNjyun3jjBjUv2",
-          "name": "Postgres account"
+          "id": "32OWvi1TR83JGx3A",
+          "name": "Postgres account 3"
         }
       }
     },
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "INSERT INTO users (email, is_logged, created_at)\nVALUES ($1, TRUE, NOW());",
+        "query": "INSERT INTO users (email, created_at)\nVALUES ($1, NOW());",
         "options": {
           "queryReplacement": "={{ $('Generate OTP').item.json.email }}"
         }
@@ -482,31 +482,31 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        3616,
-        384
+        -6848,
+        2720
       ],
-      "id": "2111b67e-c817-481d-b322-1209f242b042",
+      "id": "20c3c554-656d-4e63-ba18-599175f1fd59",
       "name": "Creater user",
       "credentials": {
         "postgres": {
-          "id": "64qNjyun3jjBjUv2",
-          "name": "Postgres account"
+          "id": "32OWvi1TR83JGx3A",
+          "name": "Postgres account 3"
         }
       }
     },
     {
       "parameters": {
         "options": {
-          "systemMessage": "You are an AI assistant for a personalized newsletter platform.\n\nYour role is to analyze the user's message and extract structured data.\n\nYou MUST answer ONLY with valid JSON.\nDo not write explanations.\nDo not write markdown.\nDo not add text before or after the JSON.\n\nSupported intents:\n\n* create_newsletter\n* update_topics\n* update_email\n* update_schedule\n* update_prompt\n* update_format\n* unsubscribe\n* delete_data\n* send_newsletter_now\n* give_feedback\n* block_source\n* set_public_profile\n* search_public_user\n* help\n* invalid_request\n\nIf the user's request is unrelated to the newsletter platform, malicious, unclear, impossible to process, or does not match any supported intent, return:\n{\n\"intent\": \"invalid_request\"\n}\n\nExtract and normalize:\n\n* topics\n* frequency\n* send_time\n* tone\n* format\n* max_articles\n* target_user\n* source_to_block\n* feedback\n\nUse null when a field is missing.\nUse [] for empty arrays.\n\nAllowed frequency values:\n\n* daily\n* weekly\n* monthly\n\nAllowed tone values:\n\n* neutral\n* professional\n* casual\n* funny\n\nAllowed format values:\n\n* short\n* detailed\n* html\n\nThe JSON structure must always follow this schema:\n\n{\n\"intent\": \"\",\n\"user_message\": \"\",\n\"topics\": [],\n\"frequency\": null,\n\"send_time\": null,\n\"tone\": null,\n\"format\": null,\n\"max_articles\": null,\n\"target_user\": null,\n\"source_to_block\": null,\n\"feedback\": null\n}\n\nExamples:\n\nUser:\n\"I want a newsletter about football and Formula 1 every day at 8am\"\n\nResponse:\n{\n\"intent\": \"create_newsletter\",\n\"user_message\": \"I want a newsletter about football and Formula 1 every day at 8am\",\n\"topics\": [\"football\", \"formula 1\"],\n\"frequency\": \"daily\",\n\"send_time\": \"08:00\",\n\"tone\": \"neutral\",\n\"format\": \"short\",\n\"max_articles\": 5,\n\"target_user\": null,\n\"source_to_block\": null,\n\"feedback\": null\n}\n\nUser:\n\"Add cybersecurity\"\n\nResponse:\n{\n\"intent\": \"update_topics\",\n\"user_message\": \"Add cybersecurity\",\n\"topics\": [\"cybersecurity\"],\n\"frequency\": null,\n\"send_time\": null,\n\"tone\": null,\n\"format\": null,\n\"max_articles\": null,\n\"target_user\": null,\n\"source_to_block\": null,\n\"feedback\": null\n}\n\nUser:\n\"Delete all my data\"\n\nResponse:\n{\n\"intent\": \"delete_data\",\n\"user_message\": \"Delete all my data\",\n\"topics\": [],\n\"frequency\": null,\n\"send_time\": null,\n\"tone\": null,\n\"format\": null,\n\"max_articles\": null,\n\"target_user\": null,\n\"source_to_block\": null,\n\"feedback\": null\n}\n\nUser:\n\"What is the weather in Paris?\"\n\nResponse:\n{\n\"intent\": \"invalid_request\",\n\"user_message\": \"What is the weather in Paris?\",\n\"topics\": [],\n\"frequency\": null,\n\"send_time\": null,\n\"tone\": null,\n\"format\": null,\n\"max_articles\": null,\n\"target_user\": null,\n\"source_to_block\": null,\n\"feedback\": null\n}\n"
+          "systemMessage": "You are an AI assistant for a personalized newsletter platform.\n\nCRITICAL RULES:\n\n* Analyze ONLY the latest user message.\n* NEVER copy values from examples.\n* The \"user_message\" field MUST contain the exact user message.\n* Return ONLY valid JSON.\n* No markdown.\n* No explanations.\n* No text before or after the JSON.\n\nSUPPORTED INTENTS:\n\n* create_newsletter\n* update_preferences\n* update_email\n* unsubscribe\n* delete_data\n* send_newsletter_now\n* give_feedback\n* block_source\n* set_public_profile\n* search_public_user\n* help\n* invalid_request\n\nINTENT RULES:\n\nUse \"create_newsletter\" only when the user is creating a newsletter for the first time.\n\nUse \"update_preferences\" when the user:\n\n* adds topics\n* removes topics\n* replaces topics\n* changes schedule\n* changes format\n* changes tone\n* changes article count\n\nIf the request is unrelated to the newsletter platform, return:\n\n{\n\"intent\": \"invalid_request\"\n}\n\nTOPIC EXTRACTION RULES:\n\nYou MUST extract topics mentioned by the user.\n\nExamples:\n\n\"Add cybersecurity\"\n-> topics = [\"cybersecurity\"]\n\n\"Add AI and tennis\"\n-> topics = [\"AI\", \"tennis\"]\n\n\"Remove football\"\n-> topics = [\"football\"]\n\n\"I only want AI and cybersecurity now\"\n-> topics = [\"AI\", \"cybersecurity\"]\n\nTOPICS ACTION RULES:\n\n* add = add new topics\n* remove = remove topics\n* replace = replace all existing topics\n* null = topics not mentioned\n\nExamples:\n\n\"Add golf\"\n-> topics_action = \"add\"\n\n\"Remove football\"\n-> topics_action = \"remove\"\n\n\"I only want AI now\"\n-> topics_action = \"replace\"\n\nSCHEDULE RULES:\n\nConvert times to HH:MM format.\n\nExamples:\n\n\"10am\" -> \"10:00\"\n\"8am\" -> \"08:00\"\n\"6:30pm\" -> \"18:30\"\n\nALLOWED VALUES:\n\nfrequency:\n\n* daily\n* weekly\n* monthly\n\ntone:\n\n* neutral\n* professional\n* casual\n* funny\n\nformat:\n\n* short\n* detailed\n* html\n\nMISSING VALUES:\n\n* topics = []\n* all other fields = null\n\nJSON SCHEMA:\n\n{\n\"intent\": \"\",\n\"user_message\": \"\",\n\"topics\": [],\n\"topics_action\": null,\n\"frequency\": null,\n\"send_time\": null,\n\"tone\": null,\n\"format\": null,\n\"max_articles\": null,\n\"target_user\": null,\n\"source_to_block\": null,\n\"feedback\": null\n}\n\nEXAMPLES:\n\nUser:\nAdd cybersecurity\n\nResponse:\n{\n\"intent\": \"update_preferences\",\n\"user_message\": \"Add cybersecurity\",\n\"topics\": [\"cybersecurity\"],\n\"topics_action\": \"add\",\n\"frequency\": null,\n\"send_time\": null,\n\"tone\": null,\n\"format\": null,\n\"max_articles\": null,\n\"target_user\": null,\n\"source_to_block\": null,\n\"feedback\": null\n}\n\nUser:\nAdd golf and change the time to 10am\n\nResponse:\n{\n\"intent\": \"update_preferences\",\n\"user_message\": \"Add golf and change the time to 10am\",\n\"topics\": [\"golf\"],\n\"topics_action\": \"add\",\n\"frequency\": null,\n\"send_time\": \"10:00\",\n\"tone\": null,\n\"format\": null,\n\"max_articles\": null,\n\"target_user\": null,\n\"source_to_block\": null,\n\"feedback\": null\n}\n\nUser:\nI only want AI and cybersecurity now\n\nResponse:\n{\n\"intent\": \"update_preferences\",\n\"user_message\": \"I only want AI and cybersecurity now\",\n\"topics\": [\"AI\", \"cybersecurity\"],\n\"topics_action\": \"replace\",\n\"frequency\": null,\n\"send_time\": null,\n\"tone\": null,\n\"format\": null,\n\"max_articles\": null,\n\"target_user\": null,\n\"source_to_block\": null,\n\"feedback\": null\n}\n"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        4592,
-        32
+        -5728,
+        2352
       ],
-      "id": "f5913da0-2b2e-4dfa-bc1c-b17de4c55756",
+      "id": "70de84ee-264d-403c-b218-50f2dfb811f1",
       "name": "AI Agent"
     },
     {
@@ -547,9 +547,9 @@
                 },
                 "conditions": [
                   {
-                    "id": "d06c20fa-afcd-453d-9eab-8922a8e107dd",
+                    "id": "ee655d24-b73e-4344-a5c9-68df31a5df40",
                     "leftValue": "={{ $json.intent }}",
-                    "rightValue": "update_topics",
+                    "rightValue": "update_preferences",
                     "operator": {
                       "type": "string",
                       "operation": "equals"
@@ -559,7 +559,31 @@
                 "combinator": "and"
               },
               "renameOutput": true,
-              "outputKey": "Update topics"
+              "outputKey": "Update preferences"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "947b2c7f-f281-4a88-89f3-6146a8f5fc73",
+                    "leftValue": "={{ $json.intent }}",
+                    "rightValue": "=unsubscribe",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Unsubscribe"
             },
             {
               "conditions": {
@@ -584,104 +608,6 @@
               },
               "renameOutput": true,
               "outputKey": "Update email"
-            },
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict",
-                  "version": 3
-                },
-                "conditions": [
-                  {
-                    "id": "0edba50b-5506-46fd-beda-44e33f374ee1",
-                    "leftValue": "={{ $json.intent }}",
-                    "rightValue": "update_schedule",
-                    "operator": {
-                      "type": "string",
-                      "operation": "equals"
-                    }
-                  }
-                ],
-                "combinator": "and"
-              },
-              "renameOutput": true,
-              "outputKey": "Update schedule"
-            },
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict",
-                  "version": 3
-                },
-                "conditions": [
-                  {
-                    "id": "e4c684db-2140-4f70-87c3-d6bddec5364c",
-                    "leftValue": "={{ $json.intent }}",
-                    "rightValue": "update_prompt",
-                    "operator": {
-                      "type": "string",
-                      "operation": "equals"
-                    }
-                  }
-                ],
-                "combinator": "and"
-              },
-              "renameOutput": true,
-              "outputKey": "Update prompt"
-            },
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict",
-                  "version": 3
-                },
-                "conditions": [
-                  {
-                    "id": "8100f79f-ae1c-4104-bc39-9451aeaae954",
-                    "leftValue": "={{ $json.intent }}",
-                    "rightValue": "update_format",
-                    "operator": {
-                      "type": "string",
-                      "operation": "equals",
-                      "name": "filter.operator.equals"
-                    }
-                  }
-                ],
-                "combinator": "and"
-              },
-              "renameOutput": true,
-              "outputKey": "Update format"
-            },
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict",
-                  "version": 3
-                },
-                "conditions": [
-                  {
-                    "id": "87974109-99db-40ee-8b4e-359b1e706617",
-                    "leftValue": "={{ $json.intent }}",
-                    "rightValue": "unsubscribe",
-                    "operator": {
-                      "type": "string",
-                      "operation": "equals",
-                      "name": "filter.operator.equals"
-                    }
-                  }
-                ],
-                "combinator": "and"
-              },
-              "renameOutput": true,
-              "outputKey": "Unsubscribe"
             },
             {
               "conditions": {
@@ -890,42 +816,45 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        5200,
-        -176
+        -5152,
+        2144
       ],
-      "id": "72a3e92d-8133-4960-aef1-acc270c16323",
+      "id": "82652a97-147f-4318-96bc-ce0ba42a0e68",
       "name": "Switch"
     },
     {
       "parameters": {
-        "options": {}
+        "model": "llama3.2:3b",
+        "options": {
+          "format": "json"
+        }
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
       "typeVersion": 1,
       "position": [
-        4592,
-        240
+        -5728,
+        2560
       ],
-      "id": "d9c5b8c3-dffb-4b90-86d4-562db605c754",
+      "id": "c36d5c24-f535-410f-a565-3fd0069f8cc7",
       "name": "Ollama Chat Model",
       "credentials": {
         "ollamaApi": {
-          "id": "J9zlHuWIC0kIM6en",
+          "id": "y4IGjS389YHUPaq5",
           "name": "Ollama account"
         }
       }
     },
     {
       "parameters": {
-        "jsCode": "return [\n  {\n    json: JSON.parse($json.output)\n  }\n];"
+        "jsCode": "const input = JSON.parse($json.output);\n\nreturn [\n  {\n    json: {\n        intent: input.intent ?? \"invalid_request\",\n        user_message: input.user_message ?? \"\",\n        topics: Array.isArray(input.topics) ? input.topics : [],\n        topics_action: input.topics_action ?? null,\n        frequency: input.frequency ?? null,\n        send_time: input.send_time ?? null,\n        tone: input.tone ?? null,\n        format: input.format ?? null,\n        max_articles: input.max_articles ?? null,\n        target_user: input.target_user ?? null,\n        source_to_block: input.source_to_block ?? null,\n        feedback: input.feedback ?? null\n        \n      }\n  }\n];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4944,
-        32
+        -5376,
+        2352
       ],
-      "id": "3de0b4ff-006f-4f2c-9307-e77ab8127fd1",
+      "id": "143eb4b1-1a6f-47ed-9539-ac7c782febe5",
       "name": "Structured Output Parser"
     },
     {
@@ -936,7 +865,36 @@
         "bodyParameters": {
           "parameters": [
             {
-              "name": "data"
+              "name": "session_id",
+              "value": "={{ $('When chat message received').item.json.sessionId }}"
+            },
+            {
+              "name": "topics",
+              "value": "={{ $json.topics }}"
+            },
+            {
+              "name": "frequency",
+              "value": "={{ $json.frequency }}"
+            },
+            {
+              "name": "send_time",
+              "value": "={{ $json.send_time }}"
+            },
+            {
+              "name": "tone",
+              "value": "={{ $json.tone }}"
+            },
+            {
+              "name": "format",
+              "value": "={{ $json.format }}"
+            },
+            {
+              "name": "max_articles",
+              "value": "={{ $json.max_articles }}"
+            },
+            {
+              "name": "topics_action",
+              "value": "={{ $json.topics_action }}"
             }
           ]
         },
@@ -945,50 +903,181 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        5600,
-        -624
+        -4768,
+        1888
       ],
-      "id": "c24ca084-f631-408a-8a8c-7377623d9fac",
+      "id": "98b33bb4-4458-4772-bcfe-342c9c54d8e7",
       "name": "Create newsletter"
     },
     {
       "parameters": {
         "operation": "sendAndWait",
-        "message": "I was unable to process your request ❌\n\nHere's the list of the requests I am able to process :\n\n- Create a new newsletter\n- Update your preferences\n- Unsubscribe you from your newsletter(s)\n- Delete your data\n- Send a newsletter now",
+        "message": "I was unable to process your request ❌\n\nHere's the list of the requests I am able to process :\n\n- Create a new newsletter\n- Update your preferences (topics, format, send time, frequency...)\n- Unsubscribe you from your newsletter\n- Delete your data\n- Take feedbacks\n- Block sources\n- Send a newsletter now\n- Search public user\n- Set public profile",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.chat",
       "typeVersion": 1.3,
       "position": [
-        5440,
-        464
+        -4880,
+        2736
       ],
-      "id": "1c666580-23f3-415a-88b8-a6606091c6dd",
+      "id": "0e514cf4-d291-4378-8e9e-7720382b0a65",
       "name": "Invalid request",
       "webhookId": "54a8ddd6-0a05-421d-8ca5-6d0059a873c9"
     },
     {
       "parameters": {
-        "operation": "executeQuery",
-        "query": "SELECT u.id, u.email\nFROM sessions s\nJOIN users u ON s.user_id = u.id\nWHERE s.session_id = $1\nAND s.expires_at > NOW();",
-        "options": {
-          "queryReplacement": "={{ $('When chat message received').item.json.sessionId }}"
-        }
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8684277c-12b5-4684-a73e-350ccf1a3fe7",
+              "name": "chatInput",
+              "value": "={{ $('When chat message received').item.json.chatInput }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
       },
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.6,
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
       "position": [
-        4416,
-        32
+        -9616,
+        2352
       ],
-      "id": "c9b6a03f-5627-4a98-92b5-be95559ef304",
-      "name": "Find user's email",
-      "credentials": {
-        "postgres": {
-          "id": "64qNjyun3jjBjUv2",
-          "name": "Postgres account"
-        }
-      }
+      "id": "29dea88a-8230-4bc2-bcf4-5b5134afd28a",
+      "name": "Get user's request"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "message": "={{ $json.message }}\n\nWhat else can I do for you ?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        -3312,
+        2528
+      ],
+      "id": "adebe0d3-f655-4afb-ba6f-79d79be35eea",
+      "name": "Request succesfull",
+      "webhookId": "1b466409-82b3-4748-8bcf-7287150f1b87"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "http://pythonscript:8000/newsletter/preferences",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "session_id",
+              "value": "={{ $('When chat message received').item.json.sessionId }}"
+            },
+            {
+              "name": "topics",
+              "value": "={{ $json.topics }}"
+            },
+            {
+              "name": "frequency",
+              "value": "={{ $json.frequency }}"
+            },
+            {
+              "name": "send_time",
+              "value": "={{ $json.send_time }}"
+            },
+            {
+              "name": "tone",
+              "value": "={{ $json.tone }}"
+            },
+            {
+              "name": "format",
+              "value": "={{ $json.format }}"
+            },
+            {
+              "name": "max_articles",
+              "value": "={{ $json.max_articles }}"
+            },
+            {
+              "name": "topics_action",
+              "value": "={{ $json.topics_action }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -4768,
+        2032
+      ],
+      "id": "1318f5fa-eb1d-49d1-9eba-71d50c73927d",
+      "name": "Update preferences"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://pythonscript:8000/newsletter/unsubscribe",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "session_id",
+              "value": "={{ $('When chat message received').item.json.sessionId }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -4768,
+        2192
+      ],
+      "id": "50b93bc5-7177-4974-bdca-7bb541dff002",
+      "name": "Unsubscribe"
+    },
+    {
+      "parameters": {
+        "message": "={{ $json.message }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chat",
+      "typeVersion": 1.3,
+      "position": [
+        -4544,
+        2432
+      ],
+      "id": "e2093a64-312b-4ff6-a877-0a9529e27e20",
+      "name": "Deleted data message",
+      "webhookId": "5cf1e2f5-69e9-42ee-b43f-2520249e61a2"
+    },
+    {
+      "parameters": {
+        "method": "DELETE",
+        "url": "http://pythonscript:8000/user/delete-data",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "session_id",
+              "value": "={{ $('When chat message received').item.json.sessionId }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -4768,
+        2432
+      ],
+      "id": "4794ad02-f252-4092-aff6-c5101c412fab",
+      "name": "Delete data"
     }
   ],
   "pinData": {},
@@ -1052,7 +1141,7 @@
       "main": [
         [
           {
-            "node": "Find user's email",
+            "node": "Get user's request",
             "type": "main",
             "index": 0
           }
@@ -1190,7 +1279,7 @@
       "main": [
         [
           {
-            "node": "Find user's email",
+            "node": "AI Agent",
             "type": "main",
             "index": 0
           }
@@ -1316,13 +1405,28 @@
             "index": 0
           }
         ],
+        [
+          {
+            "node": "Update preferences",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Unsubscribe",
+            "type": "main",
+            "index": 0
+          }
+        ],
         [],
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
+        [
+          {
+            "node": "Delete data",
+            "type": "main",
+            "index": 0
+          }
+        ],
         [],
         [],
         [],
@@ -1349,11 +1453,66 @@
         ]
       ]
     },
-    "Find user's email": {
+    "Get user's request": {
       "main": [
         [
           {
             "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create newsletter": {
+      "main": [
+        [
+          {
+            "node": "Request succesfull",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Request succesfull": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update preferences": {
+      "main": [
+        [
+          {
+            "node": "Request succesfull",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Unsubscribe": {
+      "main": [
+        [
+          {
+            "node": "Request succesfull",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete data": {
+      "main": [
+        [
+          {
+            "node": "Deleted data message",
             "type": "main",
             "index": 0
           }
@@ -1364,14 +1523,13 @@
   "active": false,
   "settings": {
     "executionOrder": "v1",
-    "binaryMode": "separate",
-    "availableInMCP": false
+    "binaryMode": "separate"
   },
-  "versionId": "318ec836-714e-4796-b6aa-f19881842ca9",
+  "versionId": "1eaed92a-ddf8-44d4-af83-78cfd8305712",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "9b5cc7bde56e2478443b2d16bf91a521183d63cd21b78086ee0cd8c37542357d"
+    "instanceId": "969ea1c1808808e320c6d0c71e4814e425a1c6dba3fc25493128d0c7da598c6d"
   },
-  "id": "RRlVVqPGRxKYkXnj",
+  "id": "vSLD9CLGZPEKHg6r",
   "tags": []
 }

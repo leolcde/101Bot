@@ -1,7 +1,6 @@
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE,
-    is_logged BOOLEAN DEFAULT false,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -24,6 +23,7 @@ CREATE TABLE user_otps (
 CREATE TABLE user_preferences (
     id SERIAL PRIMARY KEY,
     user_id INTEGER UNIQUE NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    email varchar(50) NOT NULL,
     topics TEXT[] NOT NULL DEFAULT '{}',
     frequency VARCHAR(50) DEFAULT 'daily',
     send_time TIME,
