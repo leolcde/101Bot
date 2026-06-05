@@ -28,6 +28,7 @@ tools and technologies used:
 - [Features](#features)
 - [Project Structure](#project-structure)
 - [Getting Started](#getting-started)
+- [NewsAPI Usage and Pricing](#newsapi-usage-and-pricing)
 - [Roadmap](#roadmap)
 - [Contributing](#contributing)
 - [License](#license)
@@ -167,6 +168,12 @@ In the Gmail credential node, configure the following values:
 <img src="assets/credentialsGmail.png" alt="Gmail credentials in n8n" width="1000" />
 
 Once the credentials are configured, the workflow is ready to process newsletter requests end to end.
+
+---
+
+## NewsAPI Usage and Pricing
+
+For the full documentation, see [docs/NewsAPI.md](docs/NewsAPI.md).
 
 ---
 
