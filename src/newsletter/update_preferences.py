@@ -57,6 +57,14 @@ def update_preferences(conn, data: NewsletterRequest):
             updates.append("frequency = %s")
             values.append(data.frequency)
 
+        if data.send_day is not None:
+            updates.append("send_day = %s")
+            values.append(data.send_day)
+
+        if data.send_day_of_month is not None:
+            updates.append("send_day_of_month = %s")
+            values.append(data.send_day_of_month)
+
         if data.send_time is not None:
             updates.append("send_time = %s")
             values.append(data.send_time)
@@ -65,6 +73,10 @@ def update_preferences(conn, data: NewsletterRequest):
             updates.append("tone = %s")
             values.append(data.tone)
 
+        if data.length is not None:
+            updates.append("length = %s")
+            values.append(data.length)
+
         if data.format is not None:
             updates.append("format = %s")
             values.append(data.format)
@@ -72,6 +84,7 @@ def update_preferences(conn, data: NewsletterRequest):
         if data.max_articles is not None:
             updates.append("max_articles = %s")
             values.append(data.max_articles)
+        
 
         if not updates:
             return {"success": False, "message": "No fields to update"}

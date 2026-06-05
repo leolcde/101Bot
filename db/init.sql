@@ -1,6 +1,9 @@
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE,
+    username VARCHAR(50),
+    bio VARCHAR(255),
+    is_public BOOLEAN DEFAULT false, 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -26,9 +29,12 @@ CREATE TABLE user_preferences (
     email varchar(50) NOT NULL,
     topics TEXT[] NOT NULL DEFAULT '{}',
     frequency VARCHAR(50) DEFAULT 'daily',
+    send_day VARCHAR(20),
+    send_day_of_month INTEGER,
     send_time TIME,
     tone VARCHAR(50) DEFAULT 'neutral',
-    format VARCHAR(50) DEFAULT 'short',
+    length VARCHAR(50) DEFAULT 'short',
+    format VARCHAR(50) DEFAULT 'newsletter',
     max_articles INTEGER DEFAULT 5,
     is_subscribed BOOLEAN DEFAULT true,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

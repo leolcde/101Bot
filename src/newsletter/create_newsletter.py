@@ -1,6 +1,6 @@
 from fastapi import HTTPException
-
 from newsletter.schemas import NewsletterRequest
+
 
 def create_newsletter(conn, data: NewsletterRequest):
     with conn.cursor() as cur:
@@ -19,16 +19,15 @@ def create_newsletter(conn, data: NewsletterRequest):
 
         user_id = user[0]
 
-        if data.frequency is None:
-            data.frequency = "daily"
-        if data.send_time is None:
-            data.send_time = "8:00"
-        if data.tone is None:
-            data.tone = "neutral"
-        if data.format is None:
-            data.format = "short"
-        if data.max_articles is None:
-            data.max_articles = 5
+        topics = data.topics or []
+        frequency = data.frequency or "daily"
+        send_day = data.send_day
+        send_day_of_month = data.send_day_of_month
+        send_time = data.send_time or "08:00"
+        tone = data.tone or "neutral"
+        length = data.length or "detailed"
+        format_value = data.format or "personal_news"
+        max_articles = data.max_articles or 5
 
         cur.execute("""
             INSERT INTO user_preferences (
@@ -37,18 +36,20 @@ def create_newsletter(conn, data: NewsletterRequest):
                 frequency,
                 send_time,
                 tone,
+                length,
                 format,
                 max_articles,
                 is_subscribed,
                 updated_at
             )
-            VALUES (%s, %s, %s, %s, %s, %s, %s, true, NOW())
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, true, NOW())
             ON CONFLICT (user_id)
             DO UPDATE SET
                 topics = EXCLUDED.topics,
                 frequency = EXCLUDED.frequency,
                 send_time = EXCLUDED.send_time,
                 tone = EXCLUDED.tone,
+                length = EXCLUDED.length,
                 format = EXCLUDED.format,
                 max_articles = EXCLUDED.max_articles,
                 is_subscribed = true,
@@ -56,12 +57,13 @@ def create_newsletter(conn, data: NewsletterRequest):
             RETURNING id;
         """, (
             user_id,
-            data.topics,
-            data.frequency,
-            data.send_time,
-            data.tone,
-            data.format,
-            data.max_articles
+            topics,
+            frequency,
+            send_time,
+            tone,
+            length,
+            format_value,
+            max_articles
         ))
 
         preference_id = cur.fetchone()[0]
@@ -69,6 +71,6 @@ def create_newsletter(conn, data: NewsletterRequest):
 
         return {
             "success": True,
-            "message": "Newsletter preferences saved✅",
+            "message": "Newsletter preferences saved ✅",
             "preference_id": preference_id
         }
