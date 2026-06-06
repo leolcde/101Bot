@@ -1,0 +1,362 @@
+{
+  "name": "schedule news letter",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        224,
+        432
+      ],
+      "id": "21d5149e-b429-4fed-818a-6655a0fba766",
+      "name": "Every minute"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT\n  u.id AS user_id,\n  u.email,\n  u.username,\n  pref.topics,\n  pref.frequency,\n  pref.send_day,\n  pref.send_day_of_month,\n  pref.send_time,\n  pref.tone,\n  pref.length,\n  pref.format,\n  pref.max_articles\nFROM user_preferences pref\nJOIN users u ON u.id = pref.user_id\nWHERE pref.is_subscribed = true\n  AND pref.topics != '{}'\n  AND (\n    (pref.frequency = 'daily'\n      AND TO_CHAR(NOW(), 'HH24:MI') = TO_CHAR(pref.send_time, 'HH24:MI'))\n    OR\n    (pref.frequency = 'weekly'\n      AND LOWER(TO_CHAR(NOW(), 'day')) LIKE pref.send_day || '%'\n      AND TO_CHAR(NOW(), 'HH24:MI') = TO_CHAR(pref.send_time, 'HH24:MI'))\n    OR\n    (pref.frequency = 'monthly'\n      AND EXTRACT(DAY FROM NOW()) = pref.send_day_of_month\n      AND TO_CHAR(NOW(), 'HH24:MI') = TO_CHAR(pref.send_time, 'HH24:MI'))\n  );",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        464,
+        432
+      ],
+      "id": "4f0fe8f9-ae3a-4cc9-b64a-8134aea9d141",
+      "name": "Get users to notify",
+      "credentials": {
+        "postgres": {
+          "id": "32OWvi1TR83JGx3A",
+          "name": "Postgres account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "has-users",
+              "leftValue": "={{ $input.all().length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        704,
+        432
+      ],
+      "id": "1d0b0596-124c-417c-9ec9-3882ae5d3104",
+      "name": "If users to notify"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const input = $input.item.json;\nconst topics = Array.isArray(input.topics) ? input.topics.filter(t => typeof t === 'string' && t.trim()) : [];\nconst maxArticles = Number(input.max_articles) > 0 ? Number(input.max_articles) : 5;\n\nreturn {\n  json: {\n    user_id: input.user_id,\n    email: input.email || '',\n    username: input.username || '',\n    newsletterQuery: topics.length > 0 ? topics.join(' OR ') : 'latest news',\n    maxArticles,\n    preferences: {\n      topics,\n      tone: input.tone || 'neutral',\n      length: input.length || 'short',\n      format: input.format || 'personal_news',\n      max_articles: maxArticles\n    }\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        944,
+        416
+      ],
+      "id": "5a508140-fd4d-48ce-a758-37b0b1b32761",
+      "name": "Prepare each user"
+    },
+    {
+      "parameters": {
+        "url": "https://newsapi.org/v2/everything",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "={{ $json.newsletterQuery }}"
+            },
+            {
+              "name": "language",
+              "value": "en"
+            },
+            {
+              "name": "pageSize",
+              "value": "={{ $json.maxArticles }}"
+            },
+            {
+              "name": "sortBy",
+              "value": "publishedAt"
+            },
+            {
+              "name": "apiKey",
+              "value": "439b41713071423998fff6ec46e6d0a8"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1184,
+        416
+      ],
+      "id": "9eb7bbff-5662-42d3-8b99-03f695408b88",
+      "name": "Search news"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const input = $input.item.json;\nconst articles = Array.isArray(input.articles) ? input.articles : [];\nreturn {\n  json: {\n    articles: articles.map(a => ({\n      title: a.title || '',\n      description: a.description || '',\n      url: a.url || '',\n      source: a.source?.name || ''\n    }))\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1424,
+        416
+      ],
+      "id": "81d6572a-ec5a-4b9c-8a0d-ce9865ec9c6d",
+      "name": "Simplify articles"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Preferences:\n{{ JSON.stringify($('Prepare each user').item.json.preferences) }}\n\nArticles:\n{{ JSON.stringify($json.articles) }}\n\nWrite a personalized newsletter. Return ONLY valid JSON:\n{\n  \"subject\": \"\",\n  \"body\": \"\",\n  \"articles\": [{\"title\": \"\", \"summary\": \"\", \"url\": \"\"}]\n}\n\nRules:\n- Use the tone and topics from preferences.\n- Respect the length: short or detailed.\n- Select at most 5 articles.",
+        "options": {
+          "systemMessage": "You are a newsletter editor. Return only valid JSON, no markdown."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1664,
+        416
+      ],
+      "id": "64f34749-11fa-46db-9d4c-2b82b8999651",
+      "name": "Newsletter writer"
+    },
+    {
+      "parameters": {
+        "model": "qwen2.5:7b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        1664,
+        624
+      ],
+      "id": "2b9f3e63-93fe-43d5-ba28-d5a97f9c9e72",
+      "name": "Ollama Chat Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "F6KLgcRf709Le3Oe",
+          "name": "Ollama account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const input = $input.item.json;\nconst userData = $('Prepare each user').item.json;\n\nlet parsed;\ntry {\n  parsed = JSON.parse(input.output || '{}');\n} catch {\n  parsed = { subject: 'Your 101Bot newsletter', body: String(input.output || ''), articles: [] };\n}\n\nconst articles = Array.isArray(parsed.articles) ? parsed.articles.slice(0, 5) : [];\n\nreturn {\n  json: {\n    subject: parsed.subject || 'Your 101Bot newsletter',\n    body: parsed.body || '',\n    articles,\n    email: userData.email,\n    username: userData.username\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1984,
+        416
+      ],
+      "id": "f82f2a79-a409-4abe-83ac-da164df5a5ab",
+      "name": "Normalize output"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const input = $input.item.json;\n\nconst articlesHtml = (Array.isArray(input.articles) ? input.articles : []).map(a => `\n  <div style=\"margin-bottom: 24px; padding: 16px; border-left: 4px solid #4F46E5; background: #f9f9f9; border-radius: 4px;\">\n    <h3 style=\"margin: 0 0 8px 0; font-size: 16px;\">\n      <a href=\"${a.url}\" style=\"color: #4F46E5; text-decoration: none;\">${a.title}</a>\n    </h3>\n    <p style=\"margin: 0; color: #555; font-size: 14px; line-height: 1.5;\">${a.summary}</p>\n    <a href=\"${a.url}\" style=\"display: inline-block; margin-top: 8px; font-size: 12px; color: #888;\">Read more →</a>\n  </div>\n`).join('');\n\nconst html = `<!DOCTYPE html>\n<html>\n<body style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #333;\">\n  <div style=\"background: #4F46E5; padding: 24px; border-radius: 8px; margin-bottom: 32px;\">\n    <h1 style=\"color: white; margin: 0; font-size: 22px;\">📰 101Bot Newsletter</h1>\n    <p style=\"color: #c7d2fe; margin: 8px 0 0 0; font-size: 14px;\">${input.subject}</p>\n  </div>\n  <p style=\"font-size: 15px; line-height: 1.6; margin-bottom: 28px;\">${input.body}</p>\n  ${articlesHtml}\n  <hr style=\"border: none; border-top: 1px solid #eee; margin: 32px 0;\">\n  <p style=\"color: #aaa; font-size: 12px; text-align: center;\">Sent by 101Bot for ${input.username}</p>\n</body>\n</html>`;\n\nreturn { json: { subject: input.subject, html, email: input.email, username: input.username, body: input.body, articles: input.articles } };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2224,
+        416
+      ],
+      "id": "3ba0b346-6062-42f3-bdc1-0343548bb06e",
+      "name": "Build HTML"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "={{ $json.subject }}",
+        "message": "={{ $json.html }}",
+        "options": {
+          "senderName": "101Bot"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2464,
+        416
+      ],
+      "id": "9bc79649-a8a2-4446-a109-52644df4ecee",
+      "name": "Send Gmail",
+      "webhookId": "3d93f9a8-01b7-435b-a715-3a89ed302769",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "OBnNn0fsnQ7Aj3sj",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Every minute": {
+      "main": [
+        [
+          {
+            "node": "Get users to notify",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get users to notify": {
+      "main": [
+        [
+          {
+            "node": "If users to notify",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If users to notify": {
+      "main": [
+        [
+          {
+            "node": "Prepare each user",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare each user": {
+      "main": [
+        [
+          {
+            "node": "Search news",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search news": {
+      "main": [
+        [
+          {
+            "node": "Simplify articles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simplify articles": {
+      "main": [
+        [
+          {
+            "node": "Newsletter writer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Newsletter writer": {
+      "main": [
+        [
+          {
+            "node": "Normalize output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize output": {
+      "main": [
+        [
+          {
+            "node": "Build HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build HTML": {
+      "main": [
+        [
+          {
+            "node": "Send Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Newsletter writer",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "e609072d-91fd-4c6c-a9a2-726ace6f3e94",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "969ea1c1808808e320c6d0c71e4814e425a1c6dba3fc25493128d0c7da598c6d"
+  },
+  "id": "7VsMv5o7aeRaTmzX",
+  "tags": []
+}

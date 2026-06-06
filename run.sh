@@ -28,6 +28,7 @@ done
 
 echo "⏳ Pulling llama3.2:3b.."
 docker exec -it persona-ollama ollama pull llama3.2:3b
+docker exec -it persona-ollama ollama pull qwen2.5:7b
 
 echo "✅ Postgres ready !"
 echo "✅ n8n -> http://localhost:5678"

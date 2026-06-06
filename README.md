@@ -177,6 +177,32 @@ For the full documentation, see [docs/NewsAPI.md](docs/NewsAPI.md).
 
 ---
 
+## GDPR & Data Privacy
+
+### Data handling principles
+
+- The chatbot agent does **not have direct access to the database**.  
+  All data operations are handled exclusively through controlled backend API routes.
+- User data is stored in PostgreSQL and used only for application features such as authentication, newsletter preferences, and session management.
+
+### Public profiles
+
+- A **public profile feature** is available.
+- By default, all profiles are **private**.
+- A user must explicitly enable the “public profile” option in their settings for their profile to become visible to others.
+
+### Data deletion (Right to be forgotten)
+
+- Users can request the **complete deletion of all their personal data** at any time.
+- This includes:
+  - Account information
+  - Stored preferences
+  - Sessions
+  - Newsletter-related data
+- Once requested, data is permanently removed from the database, except where legal retention obligations apply.
+
+---
+
 ## Roadmap
 
 - [X] Project management
