@@ -1702,6 +1702,66 @@
           "name": "Postgres account 3"
         }
       }
+    },
+    {
+      "parameters": {
+        "content": "# 🔐 Authentication with OTP\n",
+        "height": 528,
+        "width": 1568
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -13776,
+        2960
+      ],
+      "typeVersion": 1,
+      "id": "7b9a260a-11b2-404f-91cf-8dada0281df8",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "# 👤 User Creation\n",
+        "height": 528,
+        "width": 2128
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -12176,
+        2960
+      ],
+      "typeVersion": 1,
+      "id": "f1b4f9bd-7fb6-4573-8aae-2771e2fe29f3",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "# 📥 Writting and Sending newsletters\n",
+        "height": 672,
+        "width": 3824
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -7840,
+        3008
+      ],
+      "typeVersion": 1,
+      "id": "9c05ff78-6cfb-4a96-9457-4f2dd014c807",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "# API Python\n",
+        "height": 1232,
+        "width": 768
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -8288,
+        1744
+      ],
+      "typeVersion": 1,
+      "id": "89e001d8-8036-4fd7-a4b4-247dabab0f90",
+      "name": "Sticky Note3"
     }
   ],
   "pinData": {},
@@ -2462,7 +2522,7 @@
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "b5ebb973-dda7-4f43-892d-8ee1d8c237fa",
+  "versionId": "4c358d9b-be01-4ef0-b09e-1251792c7745",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "969ea1c1808808e320c6d0c71e4814e425a1c6dba3fc25493128d0c7da598c6d"
