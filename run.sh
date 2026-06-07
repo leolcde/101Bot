@@ -26,7 +26,7 @@ until docker exec n8n-postgres pg_isready -U n8n -d n8n_auth > /dev/null 2>&1; d
   sleep 1
 done
 
-echo "⏳ Pulling llama3.2:3b.."
+echo "⏳ Pulling llama3.2:3b and qwen2.5:7b..."
 docker exec -it persona-ollama ollama pull llama3.2:3b
 docker exec -it persona-ollama ollama pull qwen2.5:7b
 

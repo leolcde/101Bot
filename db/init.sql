@@ -34,7 +34,7 @@ CREATE TABLE user_preferences (
     send_time TIME,
     tone VARCHAR(50) DEFAULT 'neutral',
     length VARCHAR(50) DEFAULT 'short',
-    format VARCHAR(50) DEFAULT 'newsletter',
+    format VARCHAR(50),
     max_articles INTEGER DEFAULT 5,
     is_subscribed BOOLEAN DEFAULT true,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
